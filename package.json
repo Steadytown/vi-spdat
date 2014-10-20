@@ -4,13 +4,16 @@
   "description": "",
   "main": "Gruntfile.js",
   "dependencies": {
-    "grunt": "^0.4.5",
-    "grunt-browserify": "^3.0.1",
-    "grunt-react": "^0.9.0",
-    "react": "^0.11.2"
+    "react": "^0.11.2",
+    "signature_pad": "^1.3.3"
   },
   "devDependencies": {
-    "grunt-contrib-watch": "^0.6.1"
+    "browserify": "^6.1.0",
+    "del": "^0.1.3",
+    "gulp": "^3.8.8",
+    "gulp-stylus": "^1.3.3",
+    "reactify": "^0.14.0",
+    "vinyl-source-stream": "^1.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
