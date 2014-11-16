@@ -5,6 +5,7 @@ var gulp = require('gulp');
 var browserify = require('browserify'); // Bundles JS.
 var reactify = require('reactify'); // Transforms React JSX to JS.
 var source = require('vinyl-source-stream');
+var less = require('gulp-less'); // To compile LESS CSS.
 var stylus = require('gulp-stylus'); // To compile Stylus CSS.
 var concat = require('gulp-concat'); // To concat CSS files.
 
@@ -13,6 +14,14 @@ gulp.task('css', function() {
   return gulp.src('./src/css/**/*.styl')
     .pipe(stylus())
     .pipe(concat('app.css'))
+    .pipe(gulp.dest('./build/'));
+});
+
+// Our LESS task. It finds all our LESS files and compiles them.
+gulp.task('less', function() {
+  return gulp.src('./src/css/app.less')
+    .pipe(less())
+    .pipe(concat('app-less.css'))
     .pipe(gulp.dest('./build/'));
 });
 
