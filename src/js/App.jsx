@@ -3,7 +3,7 @@ var React = require('react');
 var Survey = require('./Survey.jsx');
 
 React.renderComponent(
-  <div>
+  <div className="container">
     <h1>VI-SPDAT</h1>
     <Survey/>
   </div>,

@@ -2,23 +2,28 @@
 var React = require('react');
 var ReactForms = require('react-forms');
 var RadioButtonGroup = require('react-forms/lib/RadioButtonGroup')
+var CheckBoxGroup = require('react-forms/lib/CheckBoxGroup')
 var Mapping = ReactForms.schema.Mapping;
 var Scalar = ReactForms.schema.Scalar;
+var Immutable = require('immutable');
 
-var options = [
+var yesNoOptions = [
   { value: 'y', name: 'Yes' },
   { value: 'n', name: 'No' }
 ]
 
+var refusedOptions = [ { value: 'refused', name: 'Refused' } ];
+
 var Refused = React.createClass({
   render: function() {
-    var refusedId = this._rootNodeID + '.refused';
+    var value = undefined;
+    if (this.props.checked) {
+      var value = Immutable.List.of('refused');
+    }
     return (
-      <span>
-        <label htmlFor={refusedId}>Refused</label>
-        <input id={refusedId} type="checkbox" checked={this.props.checked}
-          onChange={this.props.onChange} />
-      </span>
+      <CheckBoxGroup value={value}
+        options={refusedOptions}
+        onChange={this.props.onChange} />
     )
   }
 });
@@ -38,16 +43,17 @@ var QuestionInput = React.createClass({
     this.props.onChange(answer);
   },
 
-  handleRefused: function(e) {
-    var refused = e.target.checked ? 'refused' : ''
-    this.setState({ value: refused } );
-    this.props.onChange(refused);
+  handleRefused: function(value) {
+    this.setState({ value: value.get(0) } );
+    this.props.onChange(value);
   },
 
   input: function() {
     if (this.props.type === 'bool') {
       return (
-        <RadioButtonGroup value={this.state.value} options={options} onChange={this.handleAnswer} />
+        <RadioButtonGroup value={this.state.value}
+          options={yesNoOptions}
+          onChange={this.handleAnswer} />
       )
     } else {
       var type = this.props.type;
@@ -61,26 +67,21 @@ var QuestionInput = React.createClass({
   },
 
   render: function() {
-    var input = this.input();
-    if (this.state.value === 'refused') {
+    var refusedChecked = this.state.value === 'refused';
+    var input = refusedChecked ? undefined : this.input();
+    if (this.props.observationOnly) {
       return (
-        <Refused checked={true} onChange={this.handleRefused} />
+        <div>
+          {input}
+        </div>
       )
     } else {
-      if (this.props.observationOnly) {
-        return (
-          <div>
-            {input}
-          </div>
-        )
-      } else {
-        return (
-          <div>
-            {input}
-            <Refused checked={false} onChange={this.handleRefused} />
-          </div>
-        )
-      }
+      return (
+        <div>
+          {input}
+          <Refused onChange={this.handleRefused} checked={refusedChecked} />
+        </div>
+      )
     }
   }
 })
